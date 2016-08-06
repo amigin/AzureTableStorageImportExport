@@ -1,0 +1,25 @@
+﻿{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.0"
+    },
+    "System.Xml.ReaderWriter": "4.0.11",
+    "WindowsAzure.Storage": "7.1.3-preview"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dnxcore50",
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  }
+}
