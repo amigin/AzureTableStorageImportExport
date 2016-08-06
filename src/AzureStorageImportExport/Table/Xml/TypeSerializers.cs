@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Xml;
-using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine.Xml
+namespace AzureStorageImportExport.Table.Xml
 {
 
     public static class XmlConsts

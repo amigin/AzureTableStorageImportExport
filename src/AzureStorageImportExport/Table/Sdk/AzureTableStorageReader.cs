@@ -2,7 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine.AzureStorage
+namespace AzureStorageImportExport.Table.Sdk
 {
     public class AzureTableScanner : IAzureTableStream
     {
@@ -47,7 +47,7 @@ namespace TableStorageImportExport.Engine.AzureStorage
             _connectionString = connectionString;
         }
 
-        public IEnumerable<IAzureTableStream> GetTables()
+        public IEnumerable<IAzureTableStream> GetTables(params string[] tableNames)
         {
             var cloudStorageAccount = CloudStorageAccount.Parse(_connectionString);
 
@@ -61,8 +61,8 @@ namespace TableStorageImportExport.Engine.AzureStorage
 
                 foreach (var table in segment.Results)
                 {
-                    var tableScanner = new AzureTableScanner(table);
-                    yield return tableScanner;
+                    if (tableNames.CanTableBeYelded(table.Name))
+                        yield return new AzureTableScanner(table);
                 }
 
             } while (continuationToken != null);

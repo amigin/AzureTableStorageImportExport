@@ -1,7 +1,7 @@
 ﻿using System;
-using TableStorageImportExport.Engine;
-using TableStorageImportExport.Engine.AzureStorage;
-using TableStorageImportExport.Engine.Xml;
+using System.IO;
+using AzureStorageImportExport.Table.Sdk;
+using AzureStorageImportExport.Table.Xml;
 
 namespace TableStorageImportExport
 {
@@ -10,30 +10,66 @@ namespace TableStorageImportExport
         public static void Main(string[] args)
         {
 
-            Console.WriteLine("Params count: "+args.Length);
 
-            var inputParams = InputParamsModel.ParseFromConsoleParams(args);
-
-            if (inputParams == null)
+            try
             {
-                PrintDescription();
-                return;
+                Console.WriteLine("Params count: " + args.Length);
+
+                var inputParams = InputParamsModel.ParseFromConsoleParams(args);
+
+                if (inputParams == null)
+                {
+                    PrintDescription();
+                    return;
+                }
+
+                if (!ValidateInputModel(inputParams))
+                    return;
+
+
+                DoMainStuff(inputParams);
+
+            }
+            finally
+            {
+                Console.WriteLine("Done");
+
+                #if DEBUG
+                Console.ReadLine();
+                #endif
+
             }
 
-            if (!ValidateInputModel(inputParams))
-                return;
-            
-            switch (inputParams.Operation)
-            {
-                case OperationType.Download:
-                    AzureTableStorageReader.CreateStream(inputParams.ConnectionString).WriteToFile(inputParams.FileName);
-                    break;
-                case OperationType.Upload:
-                    AzureStorageXmlReader.CreateStream(inputParams.FileName).WriteToDb(inputParams.ConnectionString);
-                    break;
-            }
+        }
 
-            Console.WriteLine("Done");
+        private static void DoMainStuff(InputParamsModel inputParams)
+        {
+            try
+            {
+                switch (inputParams.Operation)
+                {
+                    case OperationType.Download:
+                        using (var fileStream = new FileStream(inputParams.FileName, FileMode.Create))
+                        {
+                            AzureTableStorageReader.CreateStream(inputParams.ConnectionString).WriteToStream(fileStream);
+                            fileStream.Flush();
+                        }
+                        break;
+                    case OperationType.Upload:
+                        using (var fileStream = new FileStream(inputParams.FileName, FileMode.Open))
+                            AzureStorageXmlReader.CreateStream(fileStream).WriteToDb(inputParams.ConnectionString);
+                        break;
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(e.Message);
+                Console.ResetColor();
+
+            }
         }
 
 
@@ -64,15 +100,14 @@ namespace TableStorageImportExport
                 return false;
             }
 
-
-
-
             return true;
         }
 
         private static void PrintDescription()
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Azure Table storage database exporter/importer");
+            Console.ResetColor();
             Console.WriteLine("Format: op:[d/u] cs:[connectionstring] fn:filename.xml <tb:tablename|tablename2|tablename3>");
             Console.WriteLine("Parameters:");
             Console.WriteLine("op: operation. d - Download database to file, u - Upload database from file");

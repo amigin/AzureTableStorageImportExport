@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Xml;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine.Xml
+namespace AzureStorageImportExport.Table.Xml
 {
     public static class AzureTableEntityXmlBridge
     {

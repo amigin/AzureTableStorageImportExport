@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TableStorageImportExport", "src\TableStorageImportExport\TableStorageImportExport.xproj", "{F5B20DD8-67D9-41B5-A1B5-B8BEBDD610E2}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AzureStorageImportExport", "src\AzureStorageImportExport\AzureStorageImportExport.xproj", "{2ED44871-5F6F-4A49-8370-8E74766CC172}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,11 +24,16 @@ Global
 		{F5B20DD8-67D9-41B5-A1B5-B8BEBDD610E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5B20DD8-67D9-41B5-A1B5-B8BEBDD610E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5B20DD8-67D9-41B5-A1B5-B8BEBDD610E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ED44871-5F6F-4A49-8370-8E74766CC172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ED44871-5F6F-4A49-8370-8E74766CC172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ED44871-5F6F-4A49-8370-8E74766CC172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ED44871-5F6F-4A49-8370-8E74766CC172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F5B20DD8-67D9-41B5-A1B5-B8BEBDD610E2} = {F18108FC-C1FC-4331-A938-B1C1A2614421}
+		{2ED44871-5F6F-4A49-8370-8E74766CC172} = {F18108FC-C1FC-4331-A938-B1C1A2614421}
 	EndGlobalSection
 EndGlobal

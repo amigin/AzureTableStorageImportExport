@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine.Xml
+namespace AzureStorageImportExport.Table.Xml
 {
 
 
 
     public class AzureStorageXmlReader : IAzureTableStorageStream
     {
+        private readonly Stream _stream;
 
-        public class AzureTableXmlStream : IAzureTableStream
+        private class AzureTableXmlStream : IAzureTableStream
         {
             private readonly XmlReader _xmlReader;
 
@@ -36,23 +37,19 @@ namespace TableStorageImportExport.Engine.Xml
 
         }
 
-        private readonly string _fileName;
-
-        public AzureStorageXmlReader(string fileName)
+        private AzureStorageXmlReader(Stream stream)
         {
-            _fileName = fileName;
+            _stream = stream;
         }
 
-
-
-        public IEnumerable<IAzureTableStream> GetTables()
+        public IEnumerable<IAzureTableStream> GetTables(params string[] tableNames)
         {
             var settings = new XmlReaderSettings
             {
                 IgnoreComments = true,
                 IgnoreWhitespace = true,
             };
-            using (var xmlReader = XmlReader.Create(_fileName, settings))
+            using (var xmlReader = XmlReader.Create(_stream, settings))
             {
                 xmlReader.ReadTillTableTag(XmlConsts.RootTag);
 
@@ -60,8 +57,10 @@ namespace TableStorageImportExport.Engine.Xml
                 {
                     if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == XmlConsts.TableTag)
                     {
-                        var azureTableStream = new AzureTableXmlStream(xmlReader, xmlReader[XmlConsts.TableNameAttr]);
-                        yield return azureTableStream;
+                        var tableName = xmlReader[XmlConsts.TableNameAttr];
+
+                        if (tableNames.CanTableBeYelded(tableName))
+                            yield return new AzureTableXmlStream(xmlReader, tableName);
                     }
                 }
 
@@ -70,9 +69,9 @@ namespace TableStorageImportExport.Engine.Xml
 
 
 
-        public static IAzureTableStorageStream CreateStream(string fileName)
+        public static IAzureTableStorageStream CreateStream(Stream stream)
         {
-            return new AzureStorageXmlReader(fileName);
+            return new AzureStorageXmlReader(stream);
         }
 
 

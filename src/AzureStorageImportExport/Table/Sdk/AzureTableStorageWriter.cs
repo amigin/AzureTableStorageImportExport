@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine.AzureStorage
+namespace AzureStorageImportExport.Table.Sdk
 {
-    public static class AzureTableStorageUploader
+    public static class AzureTableStorageWriter
     {
 
         public static void WriteToDb(this IAzureTableStorageStream tableStorageStream, string connectionString)
