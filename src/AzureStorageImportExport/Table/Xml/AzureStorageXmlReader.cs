@@ -6,8 +6,6 @@ using Microsoft.WindowsAzure.Storage.Table;
 namespace AzureStorageImportExport.Table.Xml
 {
 
-
-
     public class AzureStorageXmlReader : IAzureTableStorageStream
     {
         private readonly Stream _stream;
@@ -55,7 +53,7 @@ namespace AzureStorageImportExport.Table.Xml
 
                 while (xmlReader.Read())
                 {
-                    if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == XmlConsts.TableTag)
+                    if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.Name == XmlConsts.TableTag && !xmlReader.IsEmptyElement)
                     {
                         var tableName = xmlReader[XmlConsts.TableNameAttr];
 
@@ -67,14 +65,10 @@ namespace AzureStorageImportExport.Table.Xml
             }
         }
 
-
-
         public static IAzureTableStorageStream CreateStream(Stream stream)
         {
             return new AzureStorageXmlReader(stream);
         }
-
-
 
     }
     
