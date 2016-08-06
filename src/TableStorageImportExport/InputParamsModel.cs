@@ -56,6 +56,10 @@
 
         internal static InputParamsModel ParseFromParams(string[] args)
         {
+
+            if (args.Length == 0)
+            return null;
+
             var result = new InputParamsModel();
 
             foreach (var arg in args)
