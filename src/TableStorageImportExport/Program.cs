@@ -10,6 +10,8 @@ namespace TableStorageImportExport
         public static void Main(string[] args)
         {
 
+            Console.WriteLine("Params count: "+args.Length);
+
             var inputParams = InputParamsModel.ParseFromConsoleParams(args);
 
             if (inputParams == null)
@@ -32,7 +34,6 @@ namespace TableStorageImportExport
             }
 
             Console.WriteLine("Done");
-            Console.ReadLine();
         }
 
 
@@ -45,7 +46,6 @@ namespace TableStorageImportExport
                 Console.WriteLine("Please specify operation:");
                 Console.WriteLine("  op:d - to download to file");
                 Console.WriteLine("  op:u - to upload from file");
-                Console.ReadLine();
                 return false;
             }
 
@@ -54,7 +54,6 @@ namespace TableStorageImportExport
             {
                 Console.WriteLine("Please specify filename:");
                 Console.WriteLine("  fn:z:\\myfile.xml");
-                Console.ReadLine();
                 return false;
             }
 
@@ -62,7 +61,6 @@ namespace TableStorageImportExport
             {
                 Console.WriteLine("Please specify connectionstring:");
                 Console.WriteLine("  cs:[connectionstring]");
-                Console.ReadLine();
                 return false;
             }
 
@@ -78,11 +76,10 @@ namespace TableStorageImportExport
             Console.WriteLine("Format: op:[d/u] cs:[connectionstring] fn:filename.xml <tb:tablename|tablename2|tablename3>");
             Console.WriteLine("Parameters:");
             Console.WriteLine("op: operation. d - Download database to file, u - Upload database from file");
-            Console.WriteLine("cs: Azure table storage connection string");
+            Console.WriteLine("cs: Azure table storage connection string. ;-symbol can be substitued as _");
             Console.WriteLine("fn: filename to download or upload");
             Console.WriteLine("tb: tables to download. If parameter is absent - all tables are downloaded");
 
-            Console.ReadLine();
         }
 
     }

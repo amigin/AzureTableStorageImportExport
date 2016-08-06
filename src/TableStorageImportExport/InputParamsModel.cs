@@ -75,7 +75,7 @@
                 }
                 else if (arg.StartsWith(ConnStringPrefix))
                 {
-                    result.ConnectionString = ReadParamValue(arg, FileNamePrefix);
+                    result.ConnectionString = ReadParamValue(arg, FileNamePrefix).Replace("_",";");
                 }
 
             }
