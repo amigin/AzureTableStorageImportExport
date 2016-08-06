@@ -2,9 +2,9 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine
+namespace TableStorageImportExport.Engine.AzureStorage
 {
-    public class AzureTableScanner
+    public class AzureTableScanner : IAzureTableStream
     {
         private readonly CloudTable _table;
 
@@ -12,7 +12,6 @@ namespace TableStorageImportExport.Engine
         {
             _table = table;
         }
-
 
         public string TableName => _table.Name;
 
@@ -31,20 +30,28 @@ namespace TableStorageImportExport.Engine
             } while (tableContinuationToken != null);
         }
 
+
+        public override string ToString()
+        {
+            return TableName;
+        }
+
     }
 
-
-    public static class AzureTableStorageScanner
+    public class AzureTableStorageReader : IAzureTableStorageStream
     {
+        private readonly string _connectionString;
 
-        public static IEnumerable<AzureTableScanner> DownloadFromDb(string connectionString)
+        public AzureTableStorageReader(string connectionString)
         {
+            _connectionString = connectionString;
+        }
 
-
-            var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
+        public IEnumerable<IAzureTableStream> GetTables()
+        {
+            var cloudStorageAccount = CloudStorageAccount.Parse(_connectionString);
 
             var cloudTableClient = cloudStorageAccount.CreateCloudTableClient();
-
 
             TableContinuationToken continuationToken = null;
             do
@@ -58,8 +65,15 @@ namespace TableStorageImportExport.Engine
                     yield return tableScanner;
                 }
 
-
             } while (continuationToken != null);
         }
+
+
+        public static IAzureTableStorageStream CreateStream(string connectionString)
+        {
+            return new AzureTableStorageReader(connectionString);
+        }
+
+
     }
 }

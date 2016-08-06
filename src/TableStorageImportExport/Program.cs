@@ -1,5 +1,7 @@
 ﻿using System;
 using TableStorageImportExport.Engine;
+using TableStorageImportExport.Engine.AzureStorage;
+using TableStorageImportExport.Engine.Xml;
 
 namespace TableStorageImportExport
 {
@@ -18,17 +20,16 @@ namespace TableStorageImportExport
 
             if (!ValidateInputModel(inputParams))
                 return;
-
+            
             switch (inputParams.Operation)
             {
                 case OperationType.Download:
-                    AzureTableStorageDownloader.DownloadFromDb(inputParams.ConnectionString, inputParams.FileName);
+                    AzureTableStorageReader.CreateStream(inputParams.ConnectionString).WriteToFile(inputParams.FileName);
                     break;
                 case OperationType.Upload:
-                    AzureTableStorageUploader.UploadToDb(inputParams.ConnectionString, inputParams.FileName);
+                    AzureStorageXmlReader.CreateStream(inputParams.FileName).WriteToDb(inputParams.ConnectionString);
                     break;
             }
-
 
             Console.WriteLine("Done");
             Console.ReadLine();
@@ -38,6 +39,17 @@ namespace TableStorageImportExport
 
         private static bool ValidateInputModel(InputParamsModel inputParams)
         {
+
+            if (inputParams.Operation == null)
+            {
+                Console.WriteLine("Please specify operation:");
+                Console.WriteLine("  op:d - to download to file");
+                Console.WriteLine("  op:u - to upload from file");
+                Console.ReadLine();
+                return false;
+            }
+
+
             if (inputParams.FileName == null)
             {
                 Console.WriteLine("Please specify filename:");
@@ -55,14 +67,6 @@ namespace TableStorageImportExport
             }
 
 
-            if (inputParams.Operation == null)
-            {
-                Console.WriteLine("Please specify operation:");
-                Console.WriteLine("  op:d - to download to file");
-                Console.WriteLine("  op:u - to upload from file");
-                Console.ReadLine();
-                return false;
-            }
 
 
             return true;

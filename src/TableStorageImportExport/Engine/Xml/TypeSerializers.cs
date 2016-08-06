@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Xml;
+using Microsoft.WindowsAzure.Storage.Table;
 
-namespace TableStorageImportExport.Engine
+namespace TableStorageImportExport.Engine.Xml
 {
 
     public static class XmlConsts
@@ -117,6 +119,13 @@ namespace TableStorageImportExport.Engine
 
         }
 
+        public static string FromXmlBase64String(this string value)
+        {
+            var bytes = Convert.FromBase64String(value);
+            return Encoding.UTF8.GetString(bytes);
+        }
+
     }
+
 
 }
